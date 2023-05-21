@@ -130,6 +130,12 @@ if [ "$1" = add ]; then
 		options=
 		for v in $FS_MOUNTOPTIONS; do
 		    if expr "$v" : "-fstype=$fstype,."; then
+		        UHID=`id -nu 1000`
+		        UHPATH=`eval echo ~$UHID`
+		        log info "DEVNAME = $mountpoint, UHPATH = $UHPATH"
+                        rm -f $UHPATH/printer_data/gcodes/usb
+                        su -c "ln -s $mountpoint $UHPATH/printer_data/gcodes/usb" - $UHID
+
 			options="$(echo "$v" | sed 's/^[^,]*,//')"
 			break
 		    fi
@@ -184,6 +190,9 @@ if [ "$1" = add ]; then
 	fi
     fi
 elif [ "$1" = remove ]; then
+    UHID=`id -nu 1000`
+    UHPATH=`eval echo ~$UHID`
+    rm -f $UHPATH/printer_data/gcodes/usb
 
     # A block or partition device has been removed.
     # Test if it is mounted.
