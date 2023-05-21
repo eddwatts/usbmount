@@ -7,8 +7,10 @@ if [ "$1" = install ]; then
     mkdir /media 2> /dev/null || :
     for i in 0 1 2 3 4 5 6 7; do
 	mkdir /media/usb$i 2> /dev/null || :
+	chown 1000:1000 /media/usb$i
     done
     ln -s usb0 /media/usb 2> /dev/null || :
+    chown 1000:1000 /media/usb
 fi
 
 #DEBHELPER#
